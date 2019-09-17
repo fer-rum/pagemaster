@@ -25,8 +25,8 @@ module Pagemaster
 
     #
     #
-    def ingest_source
-      file = "_data/#{@source}"
+    def ingest_source(dir = nil)
+      file = File.join [dir, '_data', @source].compact
       raise Error::InvalidSource, "Cannot find source file #{file}" unless File.exist? file
 
       case File.extname file
@@ -70,7 +70,7 @@ module Pagemaster
 
       overwrite_pages if @opts.fetch :force, false
       FileUtils.mkdir_p @dir
-      @data = ingest_source
+      @data = ingest_source source_dir
       validate_data
 
       @data.map do |d|
